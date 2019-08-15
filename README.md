@@ -4,7 +4,7 @@ This repo is a map showing the analysis status for bear monitoring in Sweden 201
 If you can read swedish and are interested in knowing more about this project please visit [the project page at the museum of  natural history](https://www.nrm.se/forskningochsamlingar/miljoforskningochovervakning/viltovervakning/brunbjorn.9005856.html).
 
 # What information that can be found here
-This small repo holds code to display the samples that have been registered within the project during 2019. As the samples are arriving to the museum the meta-data are imported into the database [rovbase](rovbase.se) and the actual scat samples are being processed for extraction of DNA and genotyping. All imported samples that are registered to rovbase are imported and shown at the map together with its unique id, sample date and colored accordingly to the following criteria.
+This small repo holds code to display the samples that have been registered within the project during 2019. As the samples are arriving to the museum the meta-data are imported into the database [rovbase](https://rovbase.se) and the actual scat samples are being processed for extraction of DNA and genotyping. All imported samples that are registered to rovbase are imported and shown at the map together with its unique id, sample date and colored accordingly to the following criteria.
 
 * Black: the sample is registered at rovbase and has arrived at NRM
 * Yellow: DNA have been extracted and the samples are ready to be genotyped
