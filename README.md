@@ -1,4 +1,4 @@
-# Monitoring the swedish bear population using scat samples
+# Monitoring the swedish bear population 2019
 This repo is a map showing the analysis status for bear monitoring in Sweden 2019. The main functionaly is to display the status of the samples arriving at NRM from all the volunteers that collect scat samples and send to us.
 
 If you can read swedish and are interested in knowing more about this project please visit [the project page at the museum of  natural history](https://www.nrm.se/forskningochsamlingar/miljoforskningochovervakning/viltovervakning/brunbjorn.9005856.html).
