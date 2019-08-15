@@ -1,0 +1,40 @@
+---
+title: "Spillningprover Västerbotten, 21 augusti-31 oktober 2019"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+leaflet() %>%
+      addProviderTiles(providers$OpenStreetMap,
+                       options = providerTileOptions(noWrap = TRUE)) %>%
+      addMarkers(data = TEST)
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
