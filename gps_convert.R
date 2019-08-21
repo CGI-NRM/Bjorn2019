@@ -14,11 +14,12 @@ gps_convert <- function(data, latitude = "lat", longitude = "long") {
   #   the coordinates in the wgs84 instead of SWEREF99
   SWEREF99 <- CRS("+init=epsg:3006")
   WGS84 <- CRS("+init=epsg:4326")
-  wd <- getwd()
-  inputfile <- paste(wd, data, sep = "/")
-  inputdf <- read_excel(path = inputfile)
-  coords <- inputdf[, c(longitude, latitude)]
-  p1 <- SpatialPointsDataFrame(coords, data = inputdf, proj4string = SWEREF99)
+  #wd <- getwd()
+  #inputfile <- paste(wd, data, sep = "/")
+  #inputdf <- read_excel(path = inputfile)
+  #coords <- inputdf[, c(longitude, latitude)]
+  coords <- data[,c(longitude, latitude)]
+  p1 <- SpatialPointsDataFrame(coords, data = data, proj4string = SWEREF99)
   p2 <- spTransform(p1, WGS84)
   return(p2)
 }

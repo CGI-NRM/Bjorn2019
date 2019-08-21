@@ -1,5 +1,5 @@
 ---
-title: "Spillningprover Västerbotten, 21 augusti-31 oktober 2019"
+title: "Björninventering Västerbotten, 21 augusti-31 oktober 2019"
 output: 
   flexdashboard::flex_dashboard:
     orientation: columns
@@ -8,33 +8,82 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
+library(readxl)
+library(dplyr)
+library(leaflet)
+library(ggplot2)
+library(wesanderson)
+library(RColorBrewer)
+source("gps_convert.R")
+DNA <- read_excel("Data/Progress.xlsx")
+names(DNA) <- c("Streckkod", "DNA", "Genotyp")
+bear <- read_excel("Data/rovbasedata.xlsx")
+names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunnummer", "Kommun", "Lansnummer", "Lan")
+
+bearmap <- base::merge(bear, DNA, by = "Streckkod", all.x = TRUE)
+bearmap$DNA[is.na(bearmap$DNA)] <- 0
+bearmap$Genotyp[is.na(bearmap$Genotyp)] <- 0
+
+
+bearmap <- gps_convert(data = bearmap, latitude = "Lat", longitude = "Long")
+
+bearmap$code <- ifelse(bearmap$DNA + bearmap$Genotyp == 0, yes = "Registrerad", ifelse(bearmap$DNA + bearmap$Genotyp > 1.9, yes = "Genotypad", no = "DNA extraherat"))
+bearmap$code <- factor(bearmap$code)
+
 ```
+
+```{r}
+getColor <- function(bearmap) {
+  sapply(bearmap$code, function(code) {
+  if(code == "Registrerad") {
+    "gray"
+  } else if(code == "DNA extraherat") {
+    "orange"
+  } else {
+    "green"
+  } })
+}
+
+icons <- awesomeIcons(
+  icon = 'ios-close',
+  iconColor = 'black',
+  library = 'ion',
+  markerColor = getColor(bearmap)
+)
+```
+
+
 
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Chart A
+### Spillningsprover som skickats till Naturhistoriska riksmuseet (NRM)
 
 ```{r}
-leaflet() %>%
+# Mapping colors to the icons is done by eyeballing
+pal <- colorFactor(c("orange", "limegreen", "dimgray") , domain = bearmap$code)
+
+leaflet(bearmap) %>%
       addProviderTiles(providers$OpenStreetMap,
                        options = providerTileOptions(noWrap = TRUE)) %>%
-      addMarkers(data = TEST)
+  addAwesomeMarkers(icon=icons, label=~as.character(Streckkod)) %>%
+  addLegend( pal=pal, values = ~code, opacity=0.8, title = "Provstatus", position = "bottomleft", labels = c("Prov registrerat", "DNA extraherat", "Genotypad") )
 
 ```
 
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Prover som kommit till NRM sedan Inventeringsstarten den 21 Augusti
 
 ```{r}
-
+ggplot(as.data.frame(bearmap)) + aes(x = Datum) + geom_bar() + scale_y_continuous(name = "Inkomna prover per dag")
 ```
 
-### Chart C
+### Projektsummering fram till `r Sys.Date()`
 
-```{r}
+- Antal inkomna prover: `r length(bearmap$code)`
 
-```
+- Antal prover där DNA extraherats: `r sum(bearmap$code == "DNA extraherat")`
 
+- Antal prover med genotypdata: `r sum(bearmap$code == "Genotypad")`
