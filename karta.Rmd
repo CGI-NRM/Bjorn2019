@@ -2,6 +2,8 @@
 title: "Björninventering Västerbotten, 21 augusti-31 oktober 2019"
 output: 
   flexdashboard::flex_dashboard:
+    theme: readable
+    logo: naturhistoriska-riksmuseet.png
     orientation: columns
     vertical_layout: fill
 ---
@@ -28,7 +30,7 @@ bearmap$Genotyp[is.na(bearmap$Genotyp)] <- 0
 bearmap <- gps_convert(data = bearmap, latitude = "Lat", longitude = "Long")
 
 bearmap$code <- ifelse(bearmap$DNA + bearmap$Genotyp == 0, yes = "Registrerad", ifelse(bearmap$DNA + bearmap$Genotyp > 1.9, yes = "Genotypad", no = "DNA extraherat"))
-bearmap$code <- factor(bearmap$code)
+bearmap$code <- factor(bearmap$code, levels = c("Registrerad", "DNA extraherat", "Genotypad"))
 
 ```
 
@@ -61,13 +63,13 @@ Column {data-width=650}
 
 ```{r}
 # Mapping colors to the icons is done by eyeballing
-pal <- colorFactor(c("orange", "limegreen", "dimgray") , domain = bearmap$code)
+pal <- colorFactor(c("dimgray", "limegreen", "orange") , domain = levels(bearmap$code))
 
 leaflet(bearmap) %>%
       addProviderTiles(providers$OpenStreetMap,
                        options = providerTileOptions(noWrap = TRUE)) %>%
   addAwesomeMarkers(icon=icons, label=~as.character(Streckkod)) %>%
-  addLegend( pal=pal, values = ~code, opacity=0.8, title = "Provstatus", position = "bottomleft", labels = c("Prov registrerat", "DNA extraherat", "Genotypad") )
+  addLegend( pal=pal, values = ~levels(code), opacity=0.8, title = "Provstatus", position = "bottomleft")
 
 ```
 
