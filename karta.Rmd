@@ -18,7 +18,7 @@ library(wesanderson)
 library(RColorBrewer)
 source("gps_convert.R")
 DNA <- read_excel("Data/Progress.xlsx")
-names(DNA) <- c("Streckkod", "DNA", "Genotyp")
+names(DNA) <- c("Labnr","Streckkod", "DNA", "Genotyp")
 bear <- read_excel("Data/rovbasedata.xlsx")
 names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunnummer", "Kommun", "Lansnummer", "Lan")
 
@@ -60,7 +60,7 @@ icons <- awesomeIcons(
 Column {data-width=650}
 -----------------------------------------------------------------------
 
-### Spillningsprover som skickats till Naturhistoriska riksmuseet (NRM)
+### Spillningsprover som inkommit till Naturhistoriska riksmuseet (NRM)
 
 ```{r}
 # Mapping colors to the icons is done by eyeballing
@@ -77,7 +77,7 @@ leaflet(bearmap) %>%
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Prover som kommit till NRM sedan Inventeringsstarten den 21 Augusti
+### Antal insamlade prover per dag sedan inventeringsstarten den 21 Augusti
 
 ```{r}
 ggplot(as.data.frame(bearmap)) + aes(x = Datum) + geom_bar() + scale_y_continuous(name = "Inkomna prover per dag")
