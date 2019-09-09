@@ -25,8 +25,8 @@ names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunn
 bearmap <- base::merge(bear, DNA, by = "Streckkod", all.x = TRUE)
 bearmap$DNA[is.na(bearmap$DNA)] <- 0
 bearmap$Genotyp <- 0
-bearmap$Genotyp[is.na(bearmap$Genotyp)] <- 0
 
+bearmap$Genotyp[is.na(bearmap$Genotyp)] <- 0
 
 bearmap <- gps_convert(data = bearmap, latitude = "Lat", longitude = "Long")
 
@@ -83,7 +83,7 @@ Column {data-width=350}
 ### Antal insamlade prover per dag sedan inventeringsstarten den 21 Augusti
 
 ```{r}
-ggplot(as.data.frame(bearmap)) + aes(x = Datum) + geom_bar() + scale_y_continuous(name = "Inkomna prover per dag")
+ggplot(as.data.frame(bearmap)) + aes(x = Datum) + geom_bar() + scale_y_continuous(name = "Insamlade prover per dag")
 ```
 
 ### Projektsummering fram till `r Sys.Date()`
