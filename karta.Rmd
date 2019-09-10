@@ -86,10 +86,31 @@ Column {data-width=350}
 ggplot(as.data.frame(bearmap)) + aes(x = Datum) + geom_bar() + scale_y_continuous(name = "Inkomna prover per dag")
 ```
 
-### Projektsummering fram till `r Sys.Date()`
+### inkomna prover `r Sys.Date()`
 
-- Antal inkomna prover: `r length(bearmap$code)`
+```{r}
+Bearsamples <- length(bearmap$code)
+valueBox(Bearsamples,
+	 icon = "fa-clipboard-check",
+	 color = "gray")
+```
 
-- Antal prover där DNA extraherats: `r sum(bearmap$code == "DNA extraherat")`
+### DNA extraherat
 
-- Antal prover med genotypdata: `r sum(bearmap$code == "Genotypad")`
+```{r}
+dnaextract <- sum(bearmap$code == "DNA extraherat")
+valueBox(dnaextract,
+	 icon = "fa-dna",
+	 color = "orange")
+
+```
+
+
+### bekräftad björn
+
+```{r}
+genotyped <- sum(bearmap$code == "Genotypad")
+valueBox(genotyped,
+	 icon = "fa-paw",
+	 color = "green")
+```
