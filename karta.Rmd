@@ -35,6 +35,7 @@ bearmap$code <- factor(bearmap$code, levels = c("Registrerad", "DNA extraherat",
 bearmap[order(as.character(bearmap$code), decreasing = FALSE),]
 
 bearmap <- bearmap[bearmap$Streckkod != "SEP0156155",]
+bearmap <- bearmap[bearmap$Streckkod != "SEP0154722",]
 
 ```
 
