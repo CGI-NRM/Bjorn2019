@@ -21,7 +21,7 @@ DNA <- read_excel("Data/Progress.xlsx")
 names(DNA) <- c("Labnr","Streckkod", "DNA", "Kommentar")
 bear <- read_excel("Data/rovbasedata.xlsx")
 names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunnummer", "Kommun", "Lansnummer", "Lan")
-
+bear <- bear[bear$Lan != "Värmlands län (S)",]
 bearmap <- base::merge(bear, DNA, by = "Streckkod", all.x = TRUE)
 bearmap$DNA[is.na(bearmap$DNA)] <- 0
 bearmap$Genotyp <- 0
@@ -35,6 +35,8 @@ bearmap$code <- factor(bearmap$code, levels = c("Registrerad", "DNA extraherat",
 bearmap[order(as.character(bearmap$code), decreasing = FALSE),]
 
 bearmap <- bearmap[bearmap$Streckkod != "SEP0156155",]
+bearmap <- bearmap[bearmap$Streckkod != "SEP0154722",]
+bearmap <- bearmap[bearmap$Streckkod != "SEP0155441",]
 
 ```
 
@@ -86,10 +88,31 @@ Column {data-width=350}
 ggplot(as.data.frame(bearmap)) + aes(x = Datum) + geom_bar() + scale_y_continuous(name = "Insamlade prover per dag")
 ```
 
-### Projektsummering fram till `r Sys.Date()`
+### inkomna prover `r Sys.Date()`
 
-- Antal inkomna prover: `r length(bearmap$code)`
+```{r}
+Bearsamples <- length(bearmap$code)
+valueBox(Bearsamples,
+	 icon = "fa-clipboard-check",
+	 color = "gray")
+```
 
-- Antal prover där DNA extraherats: `r sum(bearmap$code == "DNA extraherat")`
+### DNA extraherat
 
-- Antal prover med genotypdata: `r sum(bearmap$code == "Genotypad")`
+```{r}
+dnaextract <- sum(bearmap$code == "DNA extraherat")
+valueBox(dnaextract,
+	 icon = "fa-dna",
+	 color = "orange")
+
+```
+
+
+### bekräftad björn
+
+```{r}
+genotyped <- sum(bearmap$code == "Genotypad")
+valueBox(genotyped,
+	 icon = "fa-paw",
+	 color = "green")
+```
