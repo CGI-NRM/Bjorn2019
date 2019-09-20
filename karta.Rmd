@@ -24,9 +24,10 @@ names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunn
 bear <- bear[bear$Lan != "Värmlands län (S)",]
 bearmap <- base::merge(bear, DNA, by = "Streckkod", all.x = TRUE)
 bearmap$DNA[is.na(bearmap$DNA)] <- 0
+bearmap$DNA <- as.numeric(bearmap$DNA)
 bearmap$Genotyp <- 0
 bearmap$Genotyp[is.na(bearmap$Genotyp)] <- 0
-
+bearmap$DNA[is.na(bearmap$DNA)] <- 0
 
 bearmap <- gps_convert(data = bearmap, latitude = "Lat", longitude = "Long")
 
@@ -74,8 +75,10 @@ pal <- colorFactor(c("dimgray", "orange", "limegreen") , domain = bearmap$code, 
 leaflet(bearmap) %>%
       addProviderTiles(providers$OpenStreetMap,
                        options = providerTileOptions(noWrap = TRUE)) %>%
-  addAwesomeMarkers(icon=icons, label=~as.character(Streckkod)) %>%
-  addLegend( pal=pal, values = ~code, opacity=0.8, title = "Provstatus", position = "bottomleft")
+       
+      addAwesomeMarkers(icon=icons, label=~as.character(Streckkod),
+                        clusterOptions = markerClusterOptions() ) %>%
+      addLegend( pal=pal, values = ~code, opacity=0.8, title = "Provstatus", position = "bottomleft")
 
 ```
 
