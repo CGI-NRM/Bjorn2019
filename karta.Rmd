@@ -21,7 +21,7 @@ DNA <- read_excel("Data/Progress.xlsx")
 names(DNA) <- c("Labnr","Streckkod", "DNA", "Kommentar")
 bear <- read_excel("Data/rovbasedata.xlsx")
 names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunnummer", "Kommun", "Lansnummer", "Lan")
-bear <- bear[bear$Lan != "Värmlands län (S)",]
+bear <- bear[bear$Lan == "Västerbottens län (S)",]
 bearmap <- base::merge(bear, DNA, by = "Streckkod", all.x = TRUE)
 bearmap$DNA[is.na(bearmap$DNA)] <- 0
 bearmap$Genotyp <- 0
