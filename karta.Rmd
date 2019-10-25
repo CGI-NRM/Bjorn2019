@@ -18,20 +18,18 @@ library(wesanderson)
 library(RColorBrewer)
 source("gps_convert.R")
 DNA <- read_excel("Data/Progress.xlsx")
-names(DNA) <- c("Labnr","Streckkod", "DNA", "Kommentar")
+names(DNA) <- c("Labnr","Streckkod", "DNA", "Kommentar", "Genotyp")
 bear <- read_excel("Data/rovbasedata.xlsx")
 names(bear) <- c("Streckkod", "Art", "Datum", "Lat", "Long", "Provtyp", "Kommunnummer", "Kommun", "Lansnummer", "Lan")
 bear <- bear[bear$Lan == "Västerbottens län (S)",]
 bearmap <- base::merge(bear, DNA, by = "Streckkod", all.x = TRUE)
 bearmap$DNA[is.na(bearmap$DNA)] <- 0
-bearmap$Genotyp <- 0
-
 bearmap$Genotyp[is.na(bearmap$Genotyp)] <- 0
 
 bearmap <- gps_convert(data = bearmap, latitude = "Lat", longitude = "Long")
 
-bearmap$code <- ifelse(bearmap$DNA + bearmap$Genotyp == 0, yes = "Registrerad", ifelse(bearmap$DNA + bearmap$Genotyp > 1.9, yes = "Genotypad", no = "DNA extraherat"))
-bearmap$code <- factor(bearmap$code, levels = c("Registrerad", "DNA extraherat", "Genotypad"))
+bearmap$code <- ifelse(bearmap$DNA + bearmap$Genotyp == 0, yes = "Registrerad", ifelse(bearmap$DNA + bearmap$Genotyp > 1.9, yes = "DNA från Björn", no = "DNA extraherat"))
+bearmap$code <- factor(bearmap$code, levels = c("Registrerad", "DNA extraherat", "DNA från Björn"))
 bearmap[order(as.character(bearmap$code), decreasing = FALSE),]
 
 bearmap <- bearmap[bearmap$Streckkod != "SEP0156155",]
@@ -111,7 +109,7 @@ valueBox(dnaextract,
 ### bekräftad björn
 
 ```{r}
-genotyped <- sum(bearmap$code == "Genotypad")
+genotyped <- sum(bearmap$code == "DNA från Björn")
 valueBox(genotyped,
 	 icon = "fa-paw",
 	 color = "green")
